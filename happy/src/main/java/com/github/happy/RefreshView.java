@@ -1,8 +1,6 @@
 package com.github.happy;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Matrix;
@@ -12,7 +10,6 @@ import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class RefreshView extends BaseRefreshView implements Animatable {
@@ -73,7 +70,9 @@ public class RefreshView extends BaseRefreshView implements Animatable {
 
   @Override public void setPercent(float percent, boolean invalidate) {
     setPercent(percent);
-    if (invalidate) setRotate(percent);
+    if (invalidate) {
+      setRotate(percent);
+    }
   }
 
   @Override public void offsetTopAndBottom(int offset) {
@@ -97,10 +96,11 @@ public class RefreshView extends BaseRefreshView implements Animatable {
 
   private void drawBitmap(Layer layer, Canvas canvas) {
     mMatrix.reset();
-    if(layer.getAnimation() != null) {
-      float dragPercent = Math.min(1f, Math.abs(mPercent));
-      mMatrix.postScale(layer.getAnimation().scaleX(dragPercent), layer.getAnimation().scaleY(dragPercent));
-      mMatrix.postTranslate(layer.getAnimation().slideX(dragPercent), layer.getAnimation().slideY(dragPercent));
+    if(layer.getAnimationScale() != null) {
+      mMatrix.postScale(layer.getAnimationScale().scaleX(), layer.getAnimationScale().scaleY());
+    }
+    if(layer.getAnimationSlide() != null) {
+      mMatrix.postTranslate(layer.getAnimationSlide().slideX(), layer.getAnimationSlide().slideY());
     }
     canvas.drawBitmap(layer.getBitmap(), mMatrix, null);
   }

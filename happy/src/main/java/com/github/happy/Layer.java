@@ -5,15 +5,17 @@ import android.graphics.Bitmap;
 public class Layer {
 
   private Bitmap bitmap;
-  private Animation animation;
+  private AnimationScale animationScale;
+  private AnimationSlide animationSlide;
 
   public Layer(Bitmap bitmap) {
     this.bitmap = bitmap;
   }
 
-  public Layer(Bitmap bitmap, Animation animation) {
+  public Layer(Bitmap bitmap, AnimationScale animationScale, AnimationSlide animationSlide) {
     this.bitmap = bitmap;
-    this.animation = animation;
+    this.animationScale = animationScale;
+    this.animationSlide = animationSlide;
   }
 
   public Bitmap getBitmap() {
@@ -24,15 +26,22 @@ public class Layer {
     this.bitmap = bitmap;
   }
 
-  public Animation getAnimation() {
-    return animation;
+  public AnimationScale getAnimationScale() {
+    return animationScale;
   }
 
-  public interface Animation {
-    float slideX(float dragPercent);
-    float slideY(float dragPercent);
-    float scaleX(float dragPercent);
-    float scaleY(float dragPercent);
+  public AnimationSlide getAnimationSlide() {
+    return animationSlide;
+  }
+
+  public interface AnimationScale {
+    float scaleX();
+    float scaleY();
+  }
+
+  public interface AnimationSlide {
+    float slideX();
+    float slideY();
   }
 
 }
