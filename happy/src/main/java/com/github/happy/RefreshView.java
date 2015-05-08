@@ -98,7 +98,9 @@ public class RefreshView extends BaseRefreshView implements Animatable {
   private void drawBitmap(Layer layer, Canvas canvas) {
     mMatrix.reset();
     if(layer.getAnimation() != null) {
-      mMatrix.postTranslate(0, layer.getAnimation().slideY((int) Math.min(1f, Math.abs(mPercent))));
+      float dragPercent = Math.min(1f, Math.abs(mPercent));
+      mMatrix.postScale(layer.getAnimation().scaleX(dragPercent), layer.getAnimation().scaleY(dragPercent));
+      mMatrix.postTranslate(layer.getAnimation().slideX(dragPercent), layer.getAnimation().slideY(dragPercent));
     }
     canvas.drawBitmap(layer.getBitmap(), mMatrix, null);
   }

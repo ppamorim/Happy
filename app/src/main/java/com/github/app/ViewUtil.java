@@ -46,8 +46,14 @@ public class ViewUtil {
     layers.add(
     new Layer(BitmapHelper.scaled(context.getResources(), R.drawable.sky, happyView.getWidth(),
         happyView.getHeight()), new Layer.Animation() {
-      @Override public float slideX(int dragPercent) {
 
+
+
+      @Override public float slideX(float dragPercent) {
+        return 0;
+      }
+
+      @Override public float slideY(float dragPercent) {
         float skyScale;
         float scalePercentDelta = dragPercent - SCALE_START_PERCENT;
         if (scalePercentDelta > 0) {
@@ -62,7 +68,7 @@ public class ViewUtil {
             + Utils.convertDpToPixel(context, 15) * dragPercent;
       }
 
-      @Override public float slideY(int dragPercent) {
+      @Override public float scaleX(float dragPercent) {
         float skyScale;
         float scalePercentDelta = dragPercent - SCALE_START_PERCENT;
         if (scalePercentDelta > 0) {
@@ -71,10 +77,19 @@ public class ViewUtil {
         } else {
           skyScale = SKY_INITIAL_SCALE;
         }
+        return skyScale;
+      }
 
-        return (1.0f - dragPercent) * happyView.getTotalDragDistance() - (happyView.getHeight() * 0.38f)
-            - happyView.getHeight() * (skyScale - 1.0f) / 2
-            + Utils.convertDpToPixel(context, 15) * dragPercent;
+      @Override public float scaleY(float dragPercent) {
+        float skyScale;
+        float scalePercentDelta = dragPercent - SCALE_START_PERCENT;
+        if (scalePercentDelta > 0) {
+          float scalePercent = scalePercentDelta / (1.0f - SCALE_START_PERCENT);
+          skyScale = SKY_INITIAL_SCALE - (SKY_INITIAL_SCALE - 1.0f) * scalePercent;
+        } else {
+          skyScale = SKY_INITIAL_SCALE;
+        }
+        return skyScale;
       }
     }));
 
@@ -85,12 +100,12 @@ public class ViewUtil {
     //            happyView.getWidth(),
     //            happyView.getHeight())));
 
-    layers.add(
-        new Layer(BitmapHelper.scaled(
-                context.getResources(),
-                R.drawable.sun,
-                100,
-                100)));
+    //layers.add(
+    //    new Layer(BitmapHelper.scaled(
+    //            context.getResources(),
+    //            R.drawable.sun,
+    //            100,
+    //            100)));
 
     return layers;
   }

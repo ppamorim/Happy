@@ -29,8 +29,10 @@ public class Layer {
   }
 
   public interface Animation {
-    float slideX(int dragPercent);
-    float slideY(int dragPercent);
+    float slideX(float dragPercent);
+    float slideY(float dragPercent);
+    float scaleX(float dragPercent);
+    float scaleY(float dragPercent);
   }
 
 }
