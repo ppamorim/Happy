@@ -43,9 +43,4 @@ public class HappyActivity extends AbstractActivity {
     }
   };
 
-  //layers.add(new Layer(
-  //    Bitmap.createScaledBitmap(
-  //    BitmapFactory.decodeResource(getContext().getResources(), R.drawable.buildings), mScreenWidth, mSkyHeight, true)));
-
-
 }

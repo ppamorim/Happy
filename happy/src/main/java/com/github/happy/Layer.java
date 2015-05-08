@@ -5,9 +5,15 @@ import android.graphics.Bitmap;
 public class Layer {
 
   private Bitmap bitmap;
+  private Animation animation;
 
   public Layer(Bitmap bitmap) {
     this.bitmap = bitmap;
+  }
+
+  public Layer(Bitmap bitmap, Animation animation) {
+    this.bitmap = bitmap;
+    this.animation = animation;
   }
 
   public Bitmap getBitmap() {
@@ -16,6 +22,15 @@ public class Layer {
 
   public void setBitmap(Bitmap bitmap) {
     this.bitmap = bitmap;
+  }
+
+  public Animation getAnimation() {
+    return animation;
+  }
+
+  public interface Animation {
+    float slideX(int dragPercent);
+    float slideY(int dragPercent);
   }
 
 }

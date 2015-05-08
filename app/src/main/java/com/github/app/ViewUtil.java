@@ -1,8 +1,6 @@
 package com.github.app;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +9,7 @@ import com.github.app.renderers.factory.Factory;
 import com.github.happy.BitmapHelper;
 import com.github.happy.HappyView;
 import com.github.happy.Layer;
+import com.github.happy.Utils;
 import com.github.ppamorim.recyclerrenderers.adapter.RendererAdapter;
 import com.github.ppamorim.recyclerrenderers.builder.RendererBuilder;
 import com.github.ppamorim.recyclerrenderers.interfaces.Renderable;
@@ -18,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ViewUtil {
+
+  private static final float SCALE_START_PERCENT = 0.5f;
+  private static final float SKY_INITIAL_SCALE = 1.05f;
 
   public static void configRecyclerView(final Context context, RecyclerView recyclerView) {
     recyclerView.setHasFixedSize(true);
@@ -37,20 +39,54 @@ public class ViewUtil {
     return renderables;
   }
 
-  public static Collection<Layer> generateLayers(Context context, HappyView happyView) {
+  public static Collection<Layer> generateLayers(final Context context, final HappyView happyView) {
+
     ArrayList<Layer> layers = new ArrayList<>();
 
     layers.add(
-        new Layer(
-            BitmapHelper.scaled(
-                context.getResources(),
-                R.drawable.sky,
-                happyView.getWidth(),
-                happyView.getHeight())));
+    new Layer(BitmapHelper.scaled(context.getResources(), R.drawable.sky, happyView.getWidth(),
+        happyView.getHeight()), new Layer.Animation() {
+      @Override public float slideX(int dragPercent) {
+
+        float skyScale;
+        float scalePercentDelta = dragPercent - SCALE_START_PERCENT;
+        if (scalePercentDelta > 0) {
+          float scalePercent = scalePercentDelta / (1.0f - SCALE_START_PERCENT);
+          skyScale = SKY_INITIAL_SCALE - (SKY_INITIAL_SCALE - 1.0f) * scalePercent;
+        } else {
+          skyScale = SKY_INITIAL_SCALE;
+        }
+
+        return (1.0f - dragPercent) * happyView.getTotalDragDistance() - (happyView.getHeight() * 0.38f)
+            - happyView.getHeight() * (skyScale - 1.0f) / 2
+            + Utils.convertDpToPixel(context, 15) * dragPercent;
+      }
+
+      @Override public float slideY(int dragPercent) {
+        float skyScale;
+        float scalePercentDelta = dragPercent - SCALE_START_PERCENT;
+        if (scalePercentDelta > 0) {
+          float scalePercent = scalePercentDelta / (1.0f - SCALE_START_PERCENT);
+          skyScale = SKY_INITIAL_SCALE - (SKY_INITIAL_SCALE - 1.0f) * scalePercent;
+        } else {
+          skyScale = SKY_INITIAL_SCALE;
+        }
+
+        return (1.0f - dragPercent) * happyView.getTotalDragDistance() - (happyView.getHeight() * 0.38f)
+            - happyView.getHeight() * (skyScale - 1.0f) / 2
+            + Utils.convertDpToPixel(context, 15) * dragPercent;
+      }
+    }));
+
+    //layers.add(
+    //    new Layer(BitmapHelper.scaled(
+    //            context.getResources(),
+    //            R.drawable.sky,
+    //            happyView.getWidth(),
+    //            happyView.getHeight())));
 
     layers.add(
-        new Layer(
-            BitmapHelper.scaled(
+        new Layer(BitmapHelper.scaled(
                 context.getResources(),
                 R.drawable.sun,
                 100,

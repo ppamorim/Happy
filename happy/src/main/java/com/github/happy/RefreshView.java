@@ -97,24 +97,9 @@ public class RefreshView extends BaseRefreshView implements Animatable {
 
   private void drawBitmap(Layer layer, Canvas canvas) {
     mMatrix.reset();
-
-    float dragPercent = Math.min(1f, Math.abs(mPercent));
-
-    float skyScale;
-    float scalePercentDelta = dragPercent - SCALE_START_PERCENT;
-    if (scalePercentDelta > 0) {
-      float scalePercent = scalePercentDelta / (1.0f - SCALE_START_PERCENT);
-      skyScale = SKY_INITIAL_SCALE - (SKY_INITIAL_SCALE - 1.0f) * scalePercent;
-    } else {
-      skyScale = SKY_INITIAL_SCALE;
+    if(layer.getAnimation() != null) {
+      mMatrix.postTranslate(0, layer.getAnimation().slideY((int) Math.min(1f, Math.abs(mPercent))));
     }
-    ////
-    ////float offsetX = -(mScreenWidth * skyScale - mScreenWidth) / 2.0f;
-    float offsetY = (1.0f - dragPercent) * mParent.getTotalDragDistance() - mSkyTopOffset
-        - mSkyHeight * (skyScale - 1.0f) / 2
-        + mSkyMoveOffset * dragPercent;
-
-    mMatrix.postTranslate(0, offsetY);
     canvas.drawBitmap(layer.getBitmap(), mMatrix, null);
   }
 
